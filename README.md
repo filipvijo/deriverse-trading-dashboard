@@ -6,6 +6,8 @@ A comprehensive trading analytics solution for [Deriverse](https://deriverse.io)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 ![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8?style=flat-square&logo=tailwindcss)
 
+### 🔗 [Live Demo → deriverse-trading-dashboard-virid.vercel.app](https://deriverse-trading-dashboard-virid.vercel.app/)
+
 ## ✨ Features
 
 ### 📊 Core Analytics
@@ -26,6 +28,12 @@ A comprehensive trading analytics solution for [Deriverse](https://deriverse.io)
 - Detects revenge trading, overleverage tendencies, timing issues
 - Provides actionable 3-bullet-point insights
 
+### 🔗 Real Solana Integration
+- **Phantom Wallet Connection** - Connect your wallet directly in the browser
+- **On-Chain Transaction History** - Fetches real transactions from Solana mainnet
+- **Live SOL Balance** - Displays actual wallet balance
+- **Data Source Toggle** - Switch between mock data and real wallet data
+
 ### 📱 User Experience
 - **Fully Responsive** - Mobile-first design with hamburger menu
 - **Interactive Filtering** - Date range (7d/30d/90d/All) + Symbol dropdown
@@ -45,6 +53,8 @@ A comprehensive trading analytics solution for [Deriverse](https://deriverse.io)
 | TanStack Table v8 | Advanced data tables |
 | Radix UI | Accessible UI primitives |
 | OpenAI GPT-4 | AI pattern analysis |
+| Solana Web3.js | Real wallet & on-chain data |
+| Phantom Wallet | Native browser wallet integration |
 
 ## 🚀 Getting Started
 
