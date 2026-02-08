@@ -19,6 +19,7 @@ import {
 
 export type DateRange = '7d' | '30d' | '90d' | 'all';
 export type SymbolFilter = string | 'all';
+export type DataSource = 'mock' | 'wallet';
 
 interface TradeStore {
   // Raw data
@@ -27,6 +28,10 @@ interface TradeStore {
   annotations: Record<string, string>;
   isLoading: boolean;
   isInitialized: boolean;
+
+  // Wallet integration
+  dataSource: DataSource;
+  walletAddress: string | null;
 
   // Filters
   dateRange: DateRange;
@@ -48,6 +53,9 @@ interface TradeStore {
   initializeData: () => void;
   setDateRange: (range: DateRange) => void;
   setSymbolFilter: (symbol: SymbolFilter) => void;
+  setDataSource: (source: DataSource) => void;
+  setWalletTrades: (trades: Trade[], walletAddress: string) => void;
+  disconnectWallet: () => void;
 }
 
 const createEmptyMetrics = (): SummaryMetrics => ({
@@ -139,6 +147,8 @@ export const useTradeStore = create<TradeStore>()(
       annotations: {},
       isLoading: false,
       isInitialized: false,
+      dataSource: 'mock',
+      walletAddress: null,
       dateRange: 'all',
       symbolFilter: 'all',
       availableSymbols: [],
@@ -191,6 +201,34 @@ export const useTradeStore = create<TradeStore>()(
         }, 500);
       },
 
+      setDataSource: (source) => {
+        set({ dataSource: source });
+        if (source === 'mock') {
+          get().refreshData();
+        }
+      },
+
+      setWalletTrades: (trades, walletAddress) => {
+        const { dateRange, symbolFilter } = get();
+        const computed = applyFilters(trades, dateRange, symbolFilter);
+        const availableSymbols = getAvailableSymbols(trades);
+
+        set({
+          allTrades: trades,
+          availableSymbols,
+          ...computed,
+          dataSource: 'wallet',
+          walletAddress,
+          isLoading: false,
+          isInitialized: true
+        });
+      },
+
+      disconnectWallet: () => {
+        set({ dataSource: 'mock', walletAddress: null });
+        get().refreshData();
+      },
+
       initializeData: () => {
         const { isInitialized } = get();
         if (!isInitialized) {
@@ -200,7 +238,10 @@ export const useTradeStore = create<TradeStore>()(
     }),
     {
       name: 'deriverse-trade-storage',
-      partialize: (state) => ({ annotations: state.annotations })
+      partialize: (state) => ({
+        annotations: state.annotations,
+        dataSource: state.dataSource
+      })
     }
   )
 );
